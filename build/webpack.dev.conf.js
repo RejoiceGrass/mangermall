@@ -43,6 +43,29 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     watchOptions: {
       poll: config.dev.poll,
     }
+    //提娜佳接口数据
+    before(app){
+      //配置请求路由和响应
+      app.get('/api.seller',(req,res) =>{
+        res.json({
+          errno:0,//错误码
+          data:seller
+        })
+      })
+
+      app.get('/api/goods',(req,res) =>{
+        res.json({
+          errno:0,//错误码
+          data:goods
+        })
+      })
+      app.get('/api/ratings',(req,res) =>{
+        res.json({
+          errno:0,//错误码
+          data:ratings
+        })
+      })
+    }
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -92,4 +115,21 @@ module.exports = new Promise((resolve, reject) => {
       resolve(devWebpackConfig)
     }
   })
+
+  const express = require('express')
+  // 通过 node访问模拟数据
+  const app = express();
+  //使用express框架启动一个服务器
+  //1.读取文件
+  var appDate = require(../data.json)
+  var seller = appDate.seller
+  var goods = appDate.goods
+  var ratings = appDate.ratings
+
+  //2.使用express来配饰路由，指定借口请求
+  var apiRoutes = express.Router()//定义一个路由
+
+
+  //暴露API接口
+  app.use('/api',apiRoutes)
 })
